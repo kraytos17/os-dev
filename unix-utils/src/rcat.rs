@@ -1,5 +1,7 @@
-use std::{fs::File, io};
+use std::io;
+use std::fs::File;
 
+#[allow(dead_code)]
 pub fn cat(filenames: &[String]) -> io::Result<()>{
     let mut handle = io::stdout().lock();
     for filename in filenames {
