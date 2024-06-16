@@ -39,7 +39,7 @@ pub fn zip(filenames: &[String], output_filename: &str) -> std::io::Result<()> {
 mod tests {
     use super::*;
     use std::fs::{self, File};
-    use std::io::{self, Write};
+    use std::io::Write;
 
     macro_rules! test_encode {
         ($name:ident, $input:expr, $expected:expr) => {
@@ -50,7 +50,7 @@ mod tests {
         };
     }
     
-    fn create_test_file(filename: &str, content: &str) -> io::Result<()> {
+    fn create_test_file(filename: &str, content: &str) -> std::io::Result<()> {
         let mut file = File::create(filename)?;
         file.write_all(content.as_bytes())?;
         Ok(())

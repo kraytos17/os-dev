@@ -1,14 +1,17 @@
 use std::io;
-//use std::{env, process};
+use std::env;
+//use std::process;
 
 //use crate::rcat::cat;
 //use crate::rgrep::grep;
-use crate::rzip::zip;
+//use crate::rzip::zip;
+use crate::runzip::unzip;
 
 mod rcat;
 mod rgrep;
 mod runzip;
 mod rzip;
+mod reverse;
 
 //rcat main
 // fn main() {
@@ -50,10 +53,37 @@ mod rzip;
 // }
 
 //rzip main
+// fn main() -> io::Result<()> {
+//     let args: Vec<String> = env::args().collect();
+
+//     if args.len() < 2 {
+//         eprintln!("Usage: {} <input_filename1> [<input_filename2> ...] <output_filename>", args[0]);
+//         std::process::exit(1);
+//     }
+
+//     let output_filename = &args[args.len() - 1];
+//     let input_filenames = &args[1..args.len() - 1];
+
+//     zip(input_filenames, output_filename)?;
+//     println!("Files zipped successfully.");
+
+//     Ok(())
+// }
+
+//runzip main
 fn main() -> io::Result<()> {
-    let filenames = vec![
-        String::from("test_data1.txt"),
-        String::from("test_data2.txt"),
-    ];
-    zip(&filenames, "op.txt")
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        eprintln!("Usage: {} <input_filename> <output_filename>", args[0]);
+        std::process::exit(1);
+    }
+
+    let input_filename = &args[0];
+    let output_filename = &args[1];
+
+    unzip(input_filename, output_filename)?;
+    println!("Files zipped successfully.");
+
+    Ok(())
 }
