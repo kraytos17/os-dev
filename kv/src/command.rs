@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn process_command(command: &str, cmd_table: &mut HashMap<String, String>) {
+pub fn process_command(command: &str, cmd_table: &mut HashMap<u32, String>) {
     let mut parts = command.split(',');
 
     if let Some(cmd) = parts.next() {
@@ -15,54 +15,67 @@ pub fn process_command(command: &str, cmd_table: &mut HashMap<String, String>) {
     }
 }
 
-//need the yielded iterator value to live atleast as long as the fn hence lifetime annotation.
-fn put_command<'a, I>(mut args: I, cmd_table: &mut HashMap<String, String>)
+//need the yielded iterator value(&str) to live atleast as long as the fn hence lifetime annotation.
+fn put_command<'a, I>(mut args: I, cmd_table: &mut HashMap<u32, String>)
 where
     I: Iterator<Item = &'a str>,
 {
     if let (Some(key), Some(value)) = (args.next(), args.next()) {
-        cmd_table.insert(key.to_string(), value.to_string());
-        println!("Inserted: key {:?} -> value {:?}", key, value);
+        match key.parse::<u32>() {
+            Ok(key) => {
+                cmd_table.insert(key, value.to_string());
+                println!("Inserted: key {:?} -> value {:?}", key, value);
+            }
+            Err(_) => eprintln!("Invalid key for 'put' command: key must be a u32"),
+        }
     } else {
         eprintln!("Invalid 'put' command format");
     }
 }
 
-fn get_command<'a, I>(mut args: I, cmd_table: &HashMap<String, String>)
+fn get_command<'a, I>(mut args: I, cmd_table: &HashMap<u32, String>)
 where
     I: Iterator<Item = &'a str>,
 {
     if let Some(key) = args.next() {
-        match cmd_table.get(key) {
-            Some(value) => println!("Retrieved: key {:?} -> value {:?}", key, value),
-            None => println!("Key {:?} not found", key),
+        match key.parse::<u32>() {
+            Ok(key) => match cmd_table.get(&key) {
+                Some(value) => println!("Retrieved: key {:?} -> value {:?}", key, value),
+                None => println!("Key {:?} not found", key),
+            },
+            Err(_) => eprintln!("Invalid key for 'get' command: key must be a u32"),
         }
     } else {
         eprintln!("Invalid 'get' command format");
     }
 }
 
-fn delete_command<'a, I>(mut args: I, cmd_table: &mut HashMap<String, String>)
+fn delete_command<'a, I>(mut args: I, cmd_table: &mut HashMap<u32, String>)
 where
     I: Iterator<Item = &'a str>,
 {
     if let Some(key) = args.next() {
-        if cmd_table.remove(key).is_some() {
-            println!("Deleted: key {:?}", key);
-        } else {
-            println!("Key {:?} not found", key);
+        match key.parse::<u32>() {
+            Ok(key) => {
+                if cmd_table.remove(&key).is_some() {
+                    println!("Deleted: key {:?}", key);
+                } else {
+                    println!("Key {:?} not found", key);
+                }
+            }
+            Err(_) => eprintln!("Invalid key for 'delete' command: key must be a u32"),
         }
     } else {
         eprintln!("Invalid 'delete' command format");
     }
 }
 
-fn clear_command(cmd_table: &mut HashMap<String, String>) {
+fn clear_command(cmd_table: &mut HashMap<u32, String>) {
     cmd_table.clear();
     println!("Cleared all entries");
 }
 
-fn all_command(cmd_table: &HashMap<String, String>) {
+fn all_command(cmd_table: &HashMap<u32, String>) {
     println!("All entries:");
     for (key, value) in cmd_table {
         println!("key {:?} -> value {:?}", key, value);
