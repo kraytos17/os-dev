@@ -7,5 +7,13 @@ name = "kv"
 version = "0.1.0"
 
 [[package]]
+name = "shell"
+version = "0.1.0"
+
+[[package]]
 name = "unix-utils"
+version = "0.1.0"
+
+[[package]]
+name = "web-server"
 version = "0.1.0"

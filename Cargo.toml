@@ -1,3 +1,3 @@
 [workspace]
-members = ["unix-utils", "kv"]
+members = ["unix-utils", "kv", "shell", "web-server"]
 resolver = "2"
