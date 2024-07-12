@@ -10,7 +10,7 @@ mod db;
 fn main() -> io::Result<()> {
     let file_path = "db.txt";
 
-    if Path::new(file_path).try_exists()? == false {
+    if !(Path::new(file_path).try_exists()?) {
         File::create(file_path)?;
     }
 
