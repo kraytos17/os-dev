@@ -1,0 +1,4 @@
+ls -l
+cd ..
+ls -l
+erere
