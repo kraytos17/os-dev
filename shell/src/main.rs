@@ -5,6 +5,7 @@ use std::{
     os::unix::fs::PermissionsExt,
     path::Path,
     process::{self, Command, Stdio},
+    thread,
 };
 
 enum BuiltinCmd {
@@ -56,15 +57,34 @@ fn process_file(file_path: &str, paths: &mut Vec<String>) -> io::Result<()> {
 }
 
 fn execute_input(input: &str, paths: &mut Vec<String>) {
-    let (tokens, output_file) = parse_input(input);
-    if tokens.is_empty() {
-        return;
+    let commands = input.split('&').map(str::trim).collect::<Vec<_>>();
+    dbg!(&commands);
+    let mut handles = vec![];
+
+    for cmd in commands {
+        let mut paths_clone = paths.clone();
+        let cmd = cmd.to_string();
+
+        let handle = thread::spawn(move || {
+            let (tokens, output_file) = parse_input(&cmd);
+            if tokens.is_empty() {
+                return;
+            }
+
+            if let Some(builtin_cmd) = check_builtins(&tokens) {
+                handle_builtin(builtin_cmd, &tokens, &mut paths_clone);
+            } else {
+                execute_cmd(&tokens, &paths_clone, output_file);
+            }
+        });
+
+        handles.push(handle);
     }
 
-    if let Some(builtin_cmd) = check_builtins(&tokens) {
-        handle_builtin(builtin_cmd, &tokens, paths);
-    } else {
-        execute_cmd(&tokens, paths, output_file);
+    for handle in handles {
+        if let Err(e) = handle.join() {
+            eprintln!("Failed to join thread: {:?}", e);
+        }
     }
 }
 
