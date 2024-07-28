@@ -1,5 +1,5 @@
-use std::io;
 use std::env;
+use std::io;
 //use std::process;
 
 //use crate::rcat::cat;
@@ -8,10 +8,10 @@ use std::env;
 use crate::runzip::unzip;
 
 mod rcat;
+mod reverse;
 mod rgrep;
 mod runzip;
 mod rzip;
-mod reverse;
 
 //rcat main
 // fn main() {

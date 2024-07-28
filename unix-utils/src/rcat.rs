@@ -1,8 +1,8 @@
-use std::io;
 use std::fs::File;
+use std::io;
 
 #[allow(dead_code)]
-pub fn cat(filenames: &[String]) -> io::Result<()>{
+pub fn cat(filenames: &[String]) -> io::Result<()> {
     let mut handle = io::stdout().lock();
     for filename in filenames {
         let mut file = File::open(filename)?;
@@ -13,8 +13,8 @@ pub fn cat(filenames: &[String]) -> io::Result<()>{
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
     use crate::rcat;
+    use std::path::PathBuf;
 
     fn get_test_files() -> Vec<String> {
         let test_data_path = PathBuf::from("cat_test");

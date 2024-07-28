@@ -45,6 +45,10 @@ mod tests {
         let pattern = "pattern";
         let result = grep(pattern, filename).expect("Error in grep function");
 
-        assert_eq!(result.len(), 0, "No patterns should be found in an empty file");
+        assert_eq!(
+            result.len(),
+            0,
+            "No patterns should be found in an empty file"
+        );
     }
 }

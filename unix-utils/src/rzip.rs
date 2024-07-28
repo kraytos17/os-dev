@@ -15,6 +15,7 @@ fn rle_encode(input: &str) -> String {
         op.push_str(&count.to_string());
         op.push(x);
     }
+
     op
 }
 
@@ -49,7 +50,7 @@ mod tests {
             }
         };
     }
-    
+
     fn create_test_file(filename: &str, content: &str) -> std::io::Result<()> {
         let mut file = File::create(filename)?;
         file.write_all(content.as_bytes())?;
