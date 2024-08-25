@@ -5,7 +5,7 @@ use std::io::{BufRead, BufReader, BufWriter, Read, Seek, SeekFrom, Write};
 pub fn reverse_small_files(input_file: &str, output_file: &str) -> std::io::Result<()> {
     let input = BufReader::new(File::open(input_file)?);
     let mut output = BufWriter::new(File::create(output_file)?);
-    let mut lines: Vec<String> = input.lines().filter_map(|line| line.ok()).collect();
+    let mut lines: Vec<String> = input.lines().map_while(Result::ok).collect();
     lines.reverse();
 
     for line in lines {

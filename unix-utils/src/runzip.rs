@@ -7,10 +7,10 @@ fn rle_decode(input: &str) -> String {
     let mut chars = input.chars().peekable();
 
     while let Some(c) = chars.next() {
-        let count = if c.is_digit(10) {
+        let count = if c.is_ascii_digit() {
             let mut count_str = c.to_string();
             while let Some(&next) = chars.peek() {
-                if next.is_digit(10) {
+                if next.is_ascii_digit() {
                     count_str.push(next);
                     chars.next();
                 } else {
@@ -33,7 +33,7 @@ fn rle_decode(input: &str) -> String {
 #[allow(dead_code)]
 pub fn unzip(input_file: &str, output_file: &str) -> std::io::Result<()> {
     let output_path = Path::new(output_file);
-    let mut op_file = File::create(&output_path)?;
+    let mut op_file = File::create(output_path)?;
     let mut file = File::open(input_file)?;
     let mut buffer = String::new();
     file.read_to_string(&mut buffer)?;

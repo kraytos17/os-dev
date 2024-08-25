@@ -22,7 +22,7 @@ fn rle_encode(input: &str) -> String {
 #[allow(dead_code)]
 pub fn zip(filenames: &[String], output_filename: &str) -> std::io::Result<()> {
     let output_path = Path::new(output_filename);
-    let mut output_file = File::create(&output_path)?;
+    let mut output_file = File::create(output_path)?;
 
     for filename in filenames {
         let mut file = File::open(filename)?;

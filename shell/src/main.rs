@@ -48,7 +48,7 @@ fn main() {
     }
 }
 
-fn process_file(file_path: &str, paths: &mut Vec<String>) -> io::Result<()> {
+fn process_file(file_path: &str, paths: &mut [String]) -> io::Result<()> {
     let file_content = std::fs::read_to_string(file_path)?;
     for line in file_content.lines() {
         execute_input(line, paths);
@@ -56,13 +56,13 @@ fn process_file(file_path: &str, paths: &mut Vec<String>) -> io::Result<()> {
     Ok(())
 }
 
-fn execute_input(input: &str, paths: &mut Vec<String>) {
+fn execute_input(input: &str, paths: &mut [String]) {
     let commands = input.split('&').map(str::trim).collect::<Vec<_>>();
     dbg!(&commands);
     let mut handles = vec![];
 
     for cmd in commands {
-        let mut paths_clone = paths.clone();
+        let mut paths_clone = paths.to_owned();
         let cmd = cmd.to_string();
 
         let handle = thread::spawn(move || {
